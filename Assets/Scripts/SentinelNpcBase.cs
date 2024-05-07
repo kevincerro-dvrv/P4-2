@@ -61,8 +61,8 @@ public class SentinelNpcBase : MonoBehaviour
         // Draw cone shape in the editor
         Gizmos.color = Color.red;
         Vector3 frontRayPoint = transform.position + (transform.forward * viewMaxDistance);
-        Vector3 leftRayPoint = transform.position + (Quaternion.Euler(0, -viewDegrees, 0) * transform.forward * viewMaxDistance);
-        Vector3 rightRayPoint = transform.position + (Quaternion.Euler(0, viewDegrees, 0) * transform.forward * viewMaxDistance);
+        Vector3 leftRayPoint = transform.position + (Quaternion.Euler(0, -viewDegrees/2, 0) * transform.forward * viewMaxDistance);
+        Vector3 rightRayPoint = transform.position + (Quaternion.Euler(0, viewDegrees/2, 0) * transform.forward * viewMaxDistance);
 
         Gizmos.DrawLine(transform.position, frontRayPoint);
         Gizmos.DrawLine(transform.position, leftRayPoint);
