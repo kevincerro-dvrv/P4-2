@@ -6,6 +6,17 @@ public class SentinelNpc2 : SentinelNpcBase
 
     override protected void FixedUpdate()
     {
+        // Set color based on status
+        switch (status) {
+            case SentinelNpcStatus.Follow:
+                meshRenderer.material = followMaterial;
+                break;
+            case SentinelNpcStatus.Guard:
+            default:
+                meshRenderer.material = guardMaterial;
+                break;
+        }
+
         if (target == null) {
             DetectVisiblePlayers();
             return;
@@ -27,6 +38,7 @@ public class SentinelNpc2 : SentinelNpcBase
                 // The target is not visible
                 Debug.Log("Player lost!");
                 target = null;
+                status = SentinelNpcStatus.Guard;
 
                 if (!goToLastKnownPosition) {
                     agent.ResetPath();
@@ -36,7 +48,7 @@ public class SentinelNpc2 : SentinelNpcBase
             // The target is not visible
             Debug.Log("Player lost!");
             target = null;
-            
+            status = SentinelNpcStatus.Guard;
             
             if (!goToLastKnownPosition) {
                 agent.ResetPath();

@@ -1,3 +1,4 @@
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -7,18 +8,36 @@ public class SentinelNpcBase : MonoBehaviour
     public float viewMaxDistance;
     public LayerMask targetLayer;
 
+    public Material guardMaterial;
+    public Material followMaterial;
+
     protected NavMeshAgent agent;
+    protected MeshRenderer meshRenderer;
 
     protected GameObject target;
+
+    protected SentinelNpcStatus status = SentinelNpcStatus.Guard;
 
     // Start is called before the first frame update
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        meshRenderer = GetComponent<MeshRenderer>();
     }
 
     protected virtual void FixedUpdate()
     {
+        // Set color based on status
+        switch (status) {
+            case SentinelNpcStatus.Follow:
+                meshRenderer.material = followMaterial;
+                break;
+            case SentinelNpcStatus.Guard:
+            default:
+                meshRenderer.material = guardMaterial;
+                break;
+        }
+
         if (target == null) {
             DetectVisiblePlayers();
             return;
@@ -50,6 +69,7 @@ public class SentinelNpcBase : MonoBehaviour
                         // The target is within the cone
                         Debug.Log("Player detected!");
                         target = hit.collider.gameObject;
+                        status = SentinelNpcStatus.Follow;
                     }
                 }
             }
@@ -72,4 +92,9 @@ public class SentinelNpcBase : MonoBehaviour
         Gizmos.DrawLine(frontRayPoint, rightRayPoint);
         Gizmos.DrawLine(rightRayPoint, leftRayPoint);
     }
+}
+
+public enum SentinelNpcStatus {
+    Guard,
+    Follow,
 }
