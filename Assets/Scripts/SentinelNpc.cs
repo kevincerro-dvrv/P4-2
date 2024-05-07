@@ -32,6 +32,8 @@ public class SentinelNpc : MonoBehaviour
         }
 
         agent.SetDestination(target.transform.position);
+
+        CheckTargetVisibility();
     }
 
     private void DetectVisiblePlayers()
@@ -54,14 +56,29 @@ public class SentinelNpc : MonoBehaviour
                 {
                     if (hit.collider.gameObject == collider.gameObject)
                     {
-                        // The player is within the cone
+                        // The target is within the cone
                         Debug.Log("Player detected!");
                         target = hit.collider.gameObject;
                     }
                 }
             }
         }
- 
+    }
+
+    private void CheckTargetVisibility()
+    {
+        Vector3 directionToTarget = target.transform.position - transform.position;
+
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, directionToTarget, out hit, Mathf.Infinity))
+        {
+            if (hit.collider.gameObject != target.gameObject)
+            {
+                // The target is not visible
+                Debug.Log("Player lost!");
+                target = null;
+            }
+        }
     }
 
     public void OnDrawGizmos()
