@@ -1220,6 +1220,7 @@ MonoBehaviour:
   targetLayer:
     serializedVersion: 2
     m_Bits: 8
+  goToLastKnownPosition: 0
 --- !u!1 &1272178829
 GameObject:
   m_ObjectHideFlags: 0
