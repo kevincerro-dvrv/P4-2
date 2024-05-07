@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class SentinelNpc : MonoBehaviour
+public class SentinelNpc2 : MonoBehaviour
 {
     public float viewDegrees;
     public float viewMaxDistance;
@@ -32,6 +32,8 @@ public class SentinelNpc : MonoBehaviour
         }
 
         agent.SetDestination(target.transform.position);
+
+        CheckTargetVisibility();
     }
 
     private void DetectVisiblePlayers()
@@ -59,6 +61,22 @@ public class SentinelNpc : MonoBehaviour
                         target = hit.collider.gameObject;
                     }
                 }
+            }
+        }
+    }
+
+    private void CheckTargetVisibility()
+    {
+        Vector3 directionToTarget = target.transform.position - transform.position;
+
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, directionToTarget, out hit, Mathf.Infinity))
+        {
+            if (hit.collider.gameObject != target.gameObject)
+            {
+                // The target is not visible
+                Debug.Log("Player lost!");
+                target = null;
             }
         }
     }
