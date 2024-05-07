@@ -185,6 +185,8 @@ MonoBehaviour:
   targetLayer:
     serializedVersion: 2
     m_Bits: 8
+  guardMaterial: {fileID: 2100000, guid: 0c46e29e2ddbfd54fb223bc13cf8737e, type: 2}
+  followMaterial: {fileID: 2100000, guid: b88a03e79aaf4db4c8887d5e6f3ce31d, type: 2}
   goToLastKnownPosition: 0
 --- !u!195 &140481569
 NavMeshAgent:
@@ -1369,6 +1371,8 @@ MonoBehaviour:
   targetLayer:
     serializedVersion: 2
     m_Bits: 8
+  guardMaterial: {fileID: 2100000, guid: 0c46e29e2ddbfd54fb223bc13cf8737e, type: 2}
+  followMaterial: {fileID: 2100000, guid: b88a03e79aaf4db4c8887d5e6f3ce31d, type: 2}
   goToLastKnownPosition: 0
 --- !u!1 &1272178829
 GameObject:
@@ -2306,6 +2310,8 @@ MonoBehaviour:
   targetLayer:
     serializedVersion: 2
     m_Bits: 8
+  guardMaterial: {fileID: 2100000, guid: 0c46e29e2ddbfd54fb223bc13cf8737e, type: 2}
+  followMaterial: {fileID: 2100000, guid: b88a03e79aaf4db4c8887d5e6f3ce31d, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
