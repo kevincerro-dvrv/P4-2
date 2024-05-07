@@ -80,6 +80,7 @@ public class SentinelNpcBase : MonoBehaviour
                         Debug.Log("Player detected!");
                         target = hit.collider.gameObject;
                         status = SentinelNpcStatus.Follow;
+                        agent.isStopped = false;
                     }
                 }
             }

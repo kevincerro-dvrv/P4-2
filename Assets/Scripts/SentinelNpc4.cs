@@ -40,13 +40,13 @@ public class SentinelNpc4 : SentinelNpcBase
                 meshRenderer.material = guardMaterial;
                 break;
         }
-
-        if (agent.isStopped) {
-            return;
-        }
         
         if (target == null) {
             DetectVisiblePlayers();
+            return;
+        }
+
+        if (agent.isStopped) {
             return;
         }
 
