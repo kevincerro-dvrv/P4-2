@@ -1,17 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class SentinelNpc : MonoBehaviour
+public class SentinelNpcBase : MonoBehaviour
 {
     public float viewDegrees;
     public float viewMaxDistance;
     public LayerMask targetLayer;
 
-    private NavMeshAgent agent;
+    protected NavMeshAgent agent;
 
-    private GameObject target;
+    protected GameObject target;
 
     // Start is called before the first frame update
     void Start()
@@ -19,12 +17,7 @@ public class SentinelNpc : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
-    void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
         if (target == null) {
             DetectVisiblePlayers();
@@ -34,7 +27,7 @@ public class SentinelNpc : MonoBehaviour
         agent.SetDestination(target.transform.position);
     }
 
-    private void DetectVisiblePlayers()
+    protected void DetectVisiblePlayers()
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, viewMaxDistance, targetLayer);
 
@@ -68,8 +61,8 @@ public class SentinelNpc : MonoBehaviour
         // Draw cone shape in the editor
         Gizmos.color = Color.red;
         Vector3 frontRayPoint = transform.position + (transform.forward * viewMaxDistance);
-        Vector3 leftRayPoint = transform.position + (Quaternion.Euler(0, -viewDegrees, 0) * transform.forward * viewMaxDistance);
-        Vector3 rightRayPoint = transform.position + (Quaternion.Euler(0, viewDegrees, 0) * transform.forward * viewMaxDistance);
+        Vector3 leftRayPoint = transform.position + (Quaternion.Euler(0, -viewDegrees/2, 0) * transform.forward * viewMaxDistance);
+        Vector3 rightRayPoint = transform.position + (Quaternion.Euler(0, viewDegrees/2, 0) * transform.forward * viewMaxDistance);
 
         Gizmos.DrawLine(transform.position, frontRayPoint);
         Gizmos.DrawLine(transform.position, leftRayPoint);

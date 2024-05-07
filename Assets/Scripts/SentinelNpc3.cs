@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SentinelNpc2 : SentinelNpcBase
+public class SentinelNpc3 : SentinelNpcBase
 {
     public bool goToLastKnownPosition = false;
 
