@@ -8,6 +8,7 @@ public class SentinelNpc2 : MonoBehaviour
     public float viewDegrees;
     public float viewMaxDistance;
     public LayerMask targetLayer;
+    public bool goToLastKnownPosition = false;
 
     private NavMeshAgent agent;
 
@@ -70,13 +71,25 @@ public class SentinelNpc2 : MonoBehaviour
         Vector3 directionToTarget = target.transform.position - transform.position;
 
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, directionToTarget, out hit, Mathf.Infinity))
-        {
+        if (Physics.Raycast(transform.position, directionToTarget, out hit, viewMaxDistance)){
             if (hit.collider.gameObject != target.gameObject)
             {
                 // The target is not visible
                 Debug.Log("Player lost!");
                 target = null;
+
+                if (!goToLastKnownPosition) {
+                    agent.ResetPath();
+                }
+            }
+        } else {
+            // The target is not visible
+            Debug.Log("Player lost!");
+            target = null;
+            
+            
+            if (!goToLastKnownPosition) {
+                agent.ResetPath();
             }
         }
     }
