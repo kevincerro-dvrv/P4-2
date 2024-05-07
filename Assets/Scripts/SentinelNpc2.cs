@@ -11,10 +11,18 @@ public class SentinelNpc2 : SentinelNpcBase
             case SentinelNpcStatus.Follow:
                 meshRenderer.material = followMaterial;
                 break;
+            case SentinelNpcStatus.Sleep:
+                meshRenderer.material = sleepMaterial;
+                break;
             case SentinelNpcStatus.Guard:
+            case SentinelNpcStatus.Stop:
             default:
                 meshRenderer.material = guardMaterial;
                 break;
+        }
+
+        if (agent.isStopped) {
+            return;
         }
 
         if (target == null) {

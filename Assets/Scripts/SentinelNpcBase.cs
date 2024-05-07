@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.AI;
@@ -10,6 +11,7 @@ public class SentinelNpcBase : MonoBehaviour
 
     public Material guardMaterial;
     public Material followMaterial;
+    public Material sleepMaterial;
 
     protected NavMeshAgent agent;
     protected MeshRenderer meshRenderer;
@@ -19,10 +21,12 @@ public class SentinelNpcBase : MonoBehaviour
     protected SentinelNpcStatus status = SentinelNpcStatus.Guard;
 
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         meshRenderer = GetComponent<MeshRenderer>();
+
+        StartCoroutine(RandomSleep());
     }
 
     protected virtual void FixedUpdate()
@@ -32,10 +36,18 @@ public class SentinelNpcBase : MonoBehaviour
             case SentinelNpcStatus.Follow:
                 meshRenderer.material = followMaterial;
                 break;
+            case SentinelNpcStatus.Sleep:
+                meshRenderer.material = sleepMaterial;
+                break;
             case SentinelNpcStatus.Guard:
+            case SentinelNpcStatus.Stop:
             default:
                 meshRenderer.material = guardMaterial;
                 break;
+        }
+
+        if (agent.isStopped) {
+            return;
         }
 
         if (target == null) {
@@ -52,8 +64,6 @@ public class SentinelNpcBase : MonoBehaviour
 
         foreach (Collider collider in colliders)
         {
-            Debug.Log("Collider" + collider.gameObject.name);
-
             // Check if the collider is within the cone angle
             Vector3 toCollider = collider.transform.position - transform.position;
             float angleToCollider = Vector3.Angle(transform.forward, toCollider);
@@ -92,9 +102,37 @@ public class SentinelNpcBase : MonoBehaviour
         Gizmos.DrawLine(frontRayPoint, rightRayPoint);
         Gizmos.DrawLine(rightRayPoint, leftRayPoint);
     }
+
+    private IEnumerator RandomSleep()
+    {
+        while(true) {
+            if (status != SentinelNpcStatus.Follow) {
+                yield return new WaitUntil(() => status == SentinelNpcStatus.Follow);
+            }
+
+            if (Random.value <= 0.15f) {
+                Debug.Log("Sentinel is going to sleep!");
+                target = null;
+                agent.ResetPath();
+                status = SentinelNpcStatus.Sleep;
+                agent.isStopped = true;
+                Invoke("AwakeSentinel", 5f);
+            }
+
+            yield return new WaitForSeconds(2.5f);
+        }
+    }
+
+    protected void AwakeSentinel()
+    {
+        agent.isStopped = false;
+        status = SentinelNpcStatus.Guard;
+    }
 }
 
 public enum SentinelNpcStatus {
     Guard,
     Follow,
+    Sleep,
+    Stop,
 }

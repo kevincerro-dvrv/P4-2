@@ -1,11 +1,31 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-public class SentinelNpc3 : SentinelNpcBase
+public class SentinelNpc4 : SentinelNpcBase
 {
     public bool goToLastKnownPosition = false;
 
+    public List<GameObject> targets;
+
+    private int currentTarget = 0;
+
+    override protected void Start()
+    {
+        base.Start();
+
+        agent.SetDestination(targets[currentTarget].transform.position);
+    }
+
     override protected void FixedUpdate()
     {
+        if (!agent.pathPending && agent.remainingDistance <= 0.5f) {
+            currentTarget = (currentTarget + 1) % targets.Count;
+            agent.SetDestination(targets[currentTarget].transform.position);
+            agent.isStopped = true;
+            status = SentinelNpcStatus.Stop;
+            Invoke("AwakeSentinel", 5f);
+        }
+
         // Set color based on status
         switch (status) {
             case SentinelNpcStatus.Follow:
